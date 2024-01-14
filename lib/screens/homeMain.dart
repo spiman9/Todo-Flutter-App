@@ -71,8 +71,28 @@ class _HomeMainState extends State<HomeMain> {
                         ),
                       ),
                     ),
+                    if (_foundTodo.length == 0)
+                      Column(
+                        children: [
+                          SizedBox(
+                            // color: Colors.black,
+                            height: 300,
+                            child: Image.asset(
+                              "assets/images/empty_image.png",
+                            ),
+                          ),
+                          Text(
+                            _searchController.text.length == 0 ? "Nothing to do" : "No Todo Found!!!",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600
+                            ),
+                          )
+                        ],
+                      )
 
                     // items are been rendered here!!!
+                    ,
                     for (ToDo todooo in _foundTodo.reversed)
                       ToDoItem(
                         todo: todooo,
@@ -81,7 +101,7 @@ class _HomeMainState extends State<HomeMain> {
                       ),
                     SizedBox(
                       height: 48,
-                    )
+                    ),
                   ],
                 ),
               )
@@ -186,7 +206,7 @@ class _HomeMainState extends State<HomeMain> {
       todoList.add(ToDo(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
           todoText: todo));
-          _runfilter(_searchController.text);
+      _runfilter(_searchController.text);
       //added here
     });
     _saveTodos();
@@ -207,6 +227,7 @@ class _HomeMainState extends State<HomeMain> {
   Future<void> _saveTodos() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> todosList = todoList.map((todo) => todo.toJson()).toList();
+    debugPrint(todosList.toString());
     prefs.setStringList('todos', todosList);
   }
 
